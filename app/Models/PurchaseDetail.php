@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class PurchaseDetail extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'purchase_id',
+        'product_id',
+        'quantity',
+        'price',
+        'created_by',
+        'updated_by',
+    ];
+    protected $casts = [
+        'quantity' => 'integer',
+        'price' => 'float',
+    ];
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class);
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+}
