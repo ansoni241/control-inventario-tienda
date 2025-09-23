@@ -17,26 +17,26 @@ class RoleSeeder extends Seeder
         $permissionsByRole = [
             'admin' => [
                 //Configuracion---------------------------------------------
-                'Ver configuracion',
+                'config.Ver configuracion',
                 //USUARIO
-                'ver usuarios',
-                'crear usuarios',
-                'editar usuarios',
-                'eliminar usuarios',
-                'editar estado usuario',
-                'editar password usuario',
+                'user.ver usuarios',
+                'user.crear usuarios',
+                'user.editar usuarios',
+                'user.eliminar usuarios',
+                'user.editar estado usuario',
+                'user.editar password usuario',
             ],
             'administrador' => [
                 //USUARIO
-                'ver usuarios',
-                'crear usuarios',
-                'editar usuarios',
-                'eliminar usuarios',
-                'editar estado usuario',
-                'editar password usuario',
+                'user.ver usuarios',
+                'user.crear usuarios',
+                'user.editar usuarios',
+                'user.eliminar usuarios',
+                'user.editar estado usuario',
+                'user.editar password usuario',
             ],
             'vendedor' => [
-                'ver usuarios',
+                'user.ver usuarios',
             ],
         ];
         foreach ($permissionsByRole as $roleName => $permissions) {

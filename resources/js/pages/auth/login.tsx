@@ -107,7 +107,7 @@ interface LoginProps {
 export default function Login({ status, canResetPassword }: LoginProps) {
     return (
         <>
-            <Head title="Log in" />
+            <Head title="Login" />
 
             <div className="flex min-h-screen">
                 {/* Imagen izquierda */}

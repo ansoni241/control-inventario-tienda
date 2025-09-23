@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Panel\RoleController;
 use App\Http\Controllers\Panel\SaleController;
 use App\Http\Controllers\Panel\UserController;
 use App\Http\Controllers\Panel\ProductController;
@@ -64,10 +65,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sales/{sale}/payments', [SaleController::class, 'storePayment']);
     // Route::resource('reportsales', SaleReportController::class);
     // Route::get('/reportsales/export', [SaleReportController::class, 'export'])->name('reportsales.export');
+    //Reportes
     Route::get('reportsales', [SaleReportController::class, 'index'])->name('reportsales.index');
     Route::get('reportsales/export', [SaleReportController::class, 'export'])->name('reportsales.export');
     Route::get('reportpurchases', [PurchaseReportController::class, 'index'])->name('reportpurchases.index');
     Route::get('reportpurchases/export', [PurchaseReportController::class, 'export'])->name('reportpurchases.export');
+    //ROLES Y PERMISOS
+    // Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    // Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+    Route::resource('roles', RoleController::class);
+
 });
 
 require __DIR__ . '/settings.php';

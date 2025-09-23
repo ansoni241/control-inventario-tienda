@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BaggageClaim, BookA, BookOpen, BookText, Folder, LayoutGrid, Network, PackageOpen, ShoppingCart, Truck, Users } from 'lucide-react';
+import { BaggageClaim, BookA, BookOpen, BookText, Folder, LayoutGrid, Network, PackageOpen, ShieldPlus, ShoppingCart, Truck, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -58,6 +58,11 @@ const mainNavItems: NavItem[] = [
         title: 'Users',
         href: '/users',
         icon: Users,
+    },
+    {
+        title: 'Roles',
+        href: '/roles',
+        icon: ShieldPlus,
     },
 ];
 
