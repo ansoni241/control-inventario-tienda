@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:producto.ver productos')->only(['index', 'show']);
+        $this->middleware('permission:producto.crear productos')->only(['create', 'store']);
+        $this->middleware('permission:producto.editar productos')->only(['edit', 'update']);
+        $this->middleware('permission:producto.eliminar productos')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -36,6 +43,11 @@ class ProductController extends Controller
 
         return Inertia::render('products/index', [
             'products' => $productsTransformed,
+            'can' => [
+                'create' => Auth::user()->can('producto.crear productos'),
+                'edit' => Auth::user()->can('producto.editar productos'),
+                'delete' => Auth::user()->can('producto.eliminar productos'),
+            ],
         ]);
     }
 

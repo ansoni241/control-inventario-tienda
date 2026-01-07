@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:proveedor.ver proveedores')->only(['index', 'show']);
+        $this->middleware('permission:proveedor.crear proveedores')->only(['create', 'store']);
+        $this->middleware('permission:proveedor.editar proveedores')->only(['edit', 'update']);
+        $this->middleware('permission:proveedor.eliminar proveedores')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -21,6 +28,11 @@ class SupplierController extends Controller
 
         return Inertia::render('suppliers/index', [
             'suppliers' => $suppliers,
+            'can' => [
+                'create' => Auth::user()->can('proveedor.crear proveedores'),
+                'edit' => Auth::user()->can('proveedor.editar proveedores'),
+                'delete' => Auth::user()->can('proveedor.eliminar proveedores'),
+            ],
         ]);
     }
 

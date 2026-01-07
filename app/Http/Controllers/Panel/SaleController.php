@@ -65,6 +65,29 @@ class SaleController extends Controller
             'payments.*.amount' => ['required', 'numeric', 'min:0'],
         ]);
 
+        // Validar que total de pagos no supere total de venta
+        $totalVenta = collect($validated['items'])
+            ->sum(fn($item) => $item['quantity'] * $item['unit_price']);
+
+        $totalPagos = collect($validated['payments'])
+            ->sum(fn($p) => $p['amount']);
+
+        if ($totalPagos > $totalVenta) {
+            return back()->withErrors([
+                'payments_total' => 'El total de pagos no puede ser mayor al total de la venta'
+            ])->withInput();
+        }
+
+        // Validar stock **antes de crear la venta**
+        foreach ($validated['items'] as $index => $item) {
+            $product = Product::find($item['product_id']);
+            if ($product && $product->stock < $item['quantity']) {
+                return back()->withErrors([
+                    "items.$index.quantity" => "Stock insuficiente para {$product->name}"
+                ])->withInput();
+            }
+        }
+
         // Calcular total de venta
         $total = collect($validated['items'])->sum(fn($item) => $item['quantity'] * $item['unit_price']);
 
@@ -83,10 +106,20 @@ class SaleController extends Controller
             $product = Product::find($item['product_id']);
 
             // Validar stock disponible
-            if ($product && $product->stock < $item['quantity']) {
-                return back()->withErrors([
-                    'items' => "No hay suficiente stock de {$product->name}"
-                ])->withInput();
+            // if ($product && $product->stock < $item['quantity']) {
+            //     return back()->withErrors([
+            //         'items' => "No hay suficiente stock de {$product->name}"
+            //     ])->withInput();
+            // }
+
+            foreach ($validated['items'] as $index => $item) {
+                $product = Product::find($item['product_id']);
+
+                if ($product && $product->stock < $item['quantity']) {
+                    return back()->withErrors([
+                        "items.$index.quantity" => "Stock insuficiente para {$product->name}"
+                    ])->withInput();
+                }
             }
 
             // Crear detalle de venta
@@ -276,12 +309,22 @@ class SaleController extends Controller
     /** ----------------- Eliminar pago ----------------- */
     public function deletePayment(SalePayment $payment)
     {
-        $saleId = $payment->sale_id;
+        $sale = Sale::findOrFail($payment->sale_id);
+
         $payment->delete();
 
-        $paid = SalePayment::where('sale_id', $saleId)->sum('amount');
+        $paid = SalePayment::where('sale_id', $sale->id)->sum('amount');
 
-        return response()->json(['paid' => $paid]);
+        // SI EL TOTAL PAGADO ES MENOR AL TOTAL, VUELVE A PENDIENTE
+        if ($paid < $sale->total) {
+            $sale->status = 'pendiente';
+            $sale->save();
+        }
+
+        return response()->json([
+            'paid' => $paid,
+            'status' => $sale->status,
+        ]);
     }
 
     /** ----------------- Actualizar status ----------------- */

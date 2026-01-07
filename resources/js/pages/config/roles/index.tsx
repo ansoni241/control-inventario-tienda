@@ -29,8 +29,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { roles } = usePage().props as unknown as {
+    const { roles, can } = usePage().props as unknown as {
         roles: RolesPagination;
+        can: {
+            create: boolean;
+            edit: boolean;
+            delete: boolean;
+        };
     };
     const { flash } = usePage<{ flash: { message?: string; error?: string; } }>().props;
 
@@ -80,14 +85,14 @@ export default function Index() {
                                 </button>
                             )}
                         </div> */}
-                        {/* {can.create && ( */}
-                        <Button>
-                            <Link href="/roles/create" prefetch className="flex items-center gap-2">
-                                <Plus className="h-4 w-4" />
-                                Nuevo rol
-                            </Link>
-                        </Button>
-                        {/* )} */}
+                        {can.create && (
+                            <Button>
+                                <Link href="/roles/create" prefetch className="flex items-center gap-2">
+                                    <Plus className="h-4 w-4" />
+                                    Nuevo rol
+                                </Link>
+                            </Button>
+                        )}
                     </div>
                     <Card>
                         <CardContent>
@@ -113,30 +118,23 @@ export default function Index() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end" className="w-auto p-1">
-                                                            {/* {can.edit && ( */}
-                                                            <DropdownMenuItem asChild className="p-2">
-                                                                <Link href={`/roles/${rol.id}/edit`} prefetch className="flex justify-center w-full">
-                                                                    <FaEdit className="text-blue-500" />
-                                                                    Editar
-                                                                </Link>
-                                                            </DropdownMenuItem>
-                                                            {/* )} */}
-                                                            {/* {can.delete && ( */}
-                                                            {/* <DropdownMenuItem
-                                                                // onClick={() => deletePost(user.id)}
-                                                                className="p-2 flex justify-center text-red-600"
-                                                            >
-                                                                <FiTrash2 color="#ff0000" />
-                                                                Delete
-                                                            </DropdownMenuItem> */}
-                                                            <DropdownMenuItem
-                                                                onSelect={() => deletePost(rol.id)}
-                                                                className="p-2 flex justify-center text-red-600"
-                                                            >
-                                                                <FiTrash2 color="#ff0000" />
-                                                                Delete
-                                                            </DropdownMenuItem>
-                                                            {/* )} */}
+                                                            {can.edit && (
+                                                                <DropdownMenuItem asChild className="p-2">
+                                                                    <Link href={`/roles/${rol.id}/edit`} prefetch className="flex justify-center w-full">
+                                                                        <FaEdit className="text-blue-500" />
+                                                                        Editar
+                                                                    </Link>
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            {can.delete && (
+                                                                <DropdownMenuItem
+                                                                    onSelect={() => deletePost(rol.id)}
+                                                                    className="p-2 flex justify-center text-red-600"
+                                                                >
+                                                                    <FiTrash2 color="#ff0000" />
+                                                                    Delete
+                                                                </DropdownMenuItem>
+                                                            )}
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>

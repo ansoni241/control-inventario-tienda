@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:user.ver usuarios')->only(['index', 'show']);
+        $this->middleware('permission:user.crear usuarios')->only(['create', 'store']);
+        $this->middleware('permission:user.editar usuarios')->only(['edit', 'update']);
+        $this->middleware('permission:user.editar estado usuario')->only(['updateStatus']);
+        $this->middleware('permission:user.editar password usuario')->only(['updatePassword']);
+        $this->middleware('permission:user.eliminar usuarios')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -28,6 +37,14 @@ class UserController extends Controller
 
         return Inertia::render('config/users/index', [
             'users' => $users,
+            'can' => [
+                'detalle' => Auth::user()->can('user.ver usuarios'),
+                'create' => Auth::user()->can('user.crear usuarios'),
+                'edit' => Auth::user()->can('user.editar usuarios'),
+                'delete' => Auth::user()->can('user.eliminar usuarios'),
+                'updateStatus' => Auth::user()->can('user.editar estado usuario'),
+                'updatePassword' => Auth::user()->can('user.editar password usuario'),
+            ],
         ]);
     }
 

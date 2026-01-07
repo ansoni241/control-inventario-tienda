@@ -59,6 +59,8 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
     const [confirmSave, setConfirmSave] = useState(false);
     const [confirmPaymentSave, setConfirmPaymentSave] = useState(false);
 
+    const [hasChanges, setHasChanges] = useState(false);
+
     useEffect(() => {
         if (!open) return;
         setLoading(true);
@@ -87,6 +89,7 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
                 if (sale) setSale({ ...sale, total: data.total });
                 setEditRow(null);
                 setTempDetail({});
+                setHasChanges(true);
             })
             .finally(() => setConfirmSave(false));
     };
@@ -97,6 +100,8 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
 
         axios.delete(`/sale-details/${detailId}`)
             .then(({ data }) => {
+                setHasChanges(true);
+
                 if (details.length === 1) {
                     setOpen(false);
                     router.reload();
@@ -123,6 +128,7 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
                 if (sale) setSale({ ...sale, paid: data.paid });
                 setEditPaymentRow(null);
                 setTempPayment({});
+                setHasChanges(true);
             })
             .finally(() => setConfirmPaymentSave(false));
     };
@@ -133,7 +139,16 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
         axios.delete(`/sale-payments/${paymentId}`)
             .then(({ data }) => {
                 setPayments(prev => prev.filter(p => p.id !== paymentId));
-                if (sale) setSale({ ...sale, paid: data.paid });
+
+                if (sale) {
+                    setSale({
+                        ...sale,
+                        paid: data.paid,
+                        status: data.status,
+                    });
+                }
+
+                setHasChanges(true);
             });
     };
 
@@ -148,11 +163,24 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
 
         axios.put(`/sales/${sale.id}/status`, { status: newStatus })
             .then(({ data }) => setSale(prev => prev ? { ...prev, status: data.status } : prev));
+        setHasChanges(true);
     };
 
     return (
         <>
-            <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog
+                open={open}
+                onOpenChange={(isOpen) => {
+                    if (!isOpen) {
+                        if (hasChanges) {
+                            router.reload({ only: ['sales'] });
+                        }
+                        setOpen(false);
+                    } else {
+                        setOpen(true);
+                    }
+                }}
+            >
                 <DialogContent className="sm:max-w-[900px] max-h-[90vh] flex flex-col">
                     <div className="overflow-y-auto px-4 py-2 flex-1 space-y-6">
                         <DialogHeader>
@@ -165,9 +193,9 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
                         {sale && (
                             <>
                                 {/* Encabezado */}
-                                <div className="bg-gray-50 border rounded-lg p-4 shadow-sm">
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Venta #{sale.id}</h3>
-                                    <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+                                <div className="bg-gray-50 dark:bg-gray-700 border rounded-lg p-4 shadow-sm">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-2 dark:text-white">Venta #{sale.id}</h3>
+                                    <div className="grid grid-cols-2 gap-3 text-sm text-gray-700 dark:text-white">
                                         <p><b>Cliente:</b> {sale.customer_name}</p>
                                         <p><b>Registrado por:</b> {sale.user_name}</p>
                                         <p><b>Fecha:</b> {sale.date}</p>
@@ -176,7 +204,7 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
                                             <select
                                                 value={sale.status}
                                                 onChange={e => handleStatusChange(e.target.value as Sale["status"])}
-                                                className="border rounded px-2 py-1"
+                                                className="border dark:bg-black rounded px-2 py-1"
                                             >
                                                 <option value="pendiente">Pendiente</option>
                                                 <option value="pagado">Pagado</option>
@@ -195,10 +223,10 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
 
                                 {/* Productos */}
                                 <div>
-                                    <h4 className="text-md font-semibold text-gray-800 mb-2">Productos</h4>
+                                    <h4 className="text-md font-semibold text-gray-800 mb-2 dark:text-white">Productos</h4>
                                     <div className="overflow-x-auto">
-                                        <table className="min-w-full border text-sm text-gray-700">
-                                            <thead className="bg-gray-100">
+                                        <table className="min-w-full border text-sm text-gray-700 dark:text-white">
+                                            <thead className="bg-gray-100 dark:bg-gray-700">
                                                 <tr>
                                                     <th className="px-3 py-2 text-left">Producto</th>
                                                     <th className="px-3 py-2 text-center">Cantidad</th>
@@ -267,10 +295,10 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
 
                                 {/* Pagos */}
                                 <div>
-                                    <h4 className="text-md font-semibold text-gray-800 mb-2">Pagos</h4>
+                                    <h4 className="text-md font-semibold text-gray-800 mb-2 dark:text-white">Pagos</h4>
                                     <div className="overflow-x-auto">
-                                        <table className="min-w-full border text-sm text-gray-700">
-                                            <thead className="bg-gray-100">
+                                        <table className="min-w-full border text-sm text-gray-700 dark:text-white">
+                                            <thead className="bg-gray-100 dark:bg-gray-700">
                                                 <tr>
                                                     <th className="px-3 py-2 text-left">Método</th>
                                                     <th className="px-3 py-2 text-center">Monto</th>
@@ -331,7 +359,19 @@ export default function SaleInfoModal({ open, setOpen, saledId }: Props) {
                     </div>
 
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setOpen(false)}>Cerrar</Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                setOpen(false);
+
+                                if (hasChanges) {
+                                    router.reload({ only: ['sales'] });
+                                }
+                            }}
+                        >
+                            Cerrar
+                        </Button>
+
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

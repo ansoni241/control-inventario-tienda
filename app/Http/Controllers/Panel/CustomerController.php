@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:cliente.ver clientes')->only(['index', 'show']);
+        $this->middleware('permission:cliente.crear clientes')->only(['create', 'store']);
+        $this->middleware('permission:cliente.editar clientes')->only(['edit', 'update']);
+        $this->middleware('permission:cliente.eliminar clientes')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -21,6 +28,11 @@ class CustomerController extends Controller
 
         return Inertia::render('customers/index', [
             'customers' => $customers,
+            'can' => [
+                'create' => Auth::user()->can('cliente.crear clientes'),
+                'edit' => Auth::user()->can('cliente.editar clientes'),
+                'delete' => Auth::user()->can('cliente.eliminar clientes'),
+            ],
         ]);
     }
 

@@ -112,7 +112,7 @@ export default function PurchaseInfoModal({ open, setOpen, purchaseId }: Props) 
                 if (details.length === 1) {
                     // Si se eliminó el último, simplemente cerramos el modal
                     setOpen(false);
-                     router.reload(); // ✅ recargar por completo el index de compras
+                    router.reload(); // ✅ recargar por completo el index de compras
                 } else {
                     // Quitamos el detalle del estado
                     setDetails(prev => prev.filter(d => d.id !== detailId));
@@ -134,7 +134,8 @@ export default function PurchaseInfoModal({ open, setOpen, purchaseId }: Props) 
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="sm:max-w-[800px]">
+                {/* <DialogContent className="sm:max-w-[800px]"> */}
+                <DialogContent className="w-full max-w-[95vw] sm:max-w-[800px] overflow-x-hidden">
                     <DialogHeader>
                         <DialogTitle>Detalles de la compra</DialogTitle>
                         <DialogDescription>
@@ -147,9 +148,9 @@ export default function PurchaseInfoModal({ open, setOpen, purchaseId }: Props) 
                     {purchase && (
                         <div className="space-y-6">
                             {/* Encabezado solo lectura */}
-                            <div className="bg-gray-50 border rounded-lg p-4 shadow-sm">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Compra #{purchase.id}</h3>
-                                <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+                            <div className="bg-gray-50 dark:bg-gray-800 border rounded-lg p-4 shadow-sm dark:text-gray-200">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-2 dark:text-white">Compra #{purchase.id}</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700 dark:text-white">
                                     <p><b>Proveedor:</b> {purchase.supplier_name}</p>
                                     <p><b>Fecha:</b> {purchase.date}</p>
                                     <p><b>Factura Nº:</b> {purchase.invoice_number || "—"}</p>
@@ -163,10 +164,10 @@ export default function PurchaseInfoModal({ open, setOpen, purchaseId }: Props) 
 
                             {/* Detalles editables */}
                             <div>
-                                <h4 className="text-md font-semibold text-gray-800 mb-3">Productos</h4>
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full border text-sm text-gray-700">
-                                        <thead className="bg-gray-100">
+                                <h4 className="text-md font-semibold text-gray-800 mb-3 dark:text-white">Productos</h4>
+                                <div className="overflow-x-auto w-full">
+                                    <table className="min-w-[700px] border text-sm text-gray-700 dark:text-white">
+                                        <thead className="bg-gray-100 dark:bg-gray-800">
                                             <tr>
                                                 <th className="px-3 py-2 text-left">Producto</th>
                                                 <th className="px-3 py-2 text-center">Cantidad</th>

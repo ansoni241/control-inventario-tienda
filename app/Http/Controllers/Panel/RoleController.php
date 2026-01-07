@@ -11,6 +11,13 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:role.ver roles')->only(['index', 'show']);
+        $this->middleware('permission:role.crear roles')->only(['create', 'store']);
+        $this->middleware('permission:role.editar roles')->only(['edit', 'update']);
+        $this->middleware('permission:role.eliminar roles')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -28,6 +35,11 @@ class RoleController extends Controller
         return Inertia::render('config/roles/index', [
             'roles' => $roles,
             'permissions' => $permissions,
+            'can' => [
+                'create' => Auth::user()->can('role.crear roles'),
+                'edit' => Auth::user()->can('role.editar roles'),
+                'delete' => Auth::user()->can('role.eliminar roles'),
+            ],
         ]);
     }
 

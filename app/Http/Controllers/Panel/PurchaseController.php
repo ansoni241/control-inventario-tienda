@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:compra.ver compras')->only(['index', 'show']);
+        $this->middleware('permission:compra.crear compras')->only(['create', 'store']);
+        $this->middleware('permission:compra.editar compras')->only(['edit', 'update']);
+        $this->middleware('permission:compra.eliminar compras')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -38,7 +45,13 @@ class PurchaseController extends Controller
         });
 
         return Inertia::render('purchases/index', [
-            'purchases' => $purchases
+            'purchases' => $purchases,
+            'can' => [
+                'create' => Auth::user()->can('compra.crear compras'),
+                'show' => Auth::user()->can('compra.ver compras'),
+                'edit' => Auth::user()->can('compra.editar compras'),
+                'delete' => Auth::user()->can('compra.eliminar compras'),
+            ],
         ]);
     }
 

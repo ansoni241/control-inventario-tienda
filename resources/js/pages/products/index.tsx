@@ -29,8 +29,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { products } = usePage().props as unknown as {
+    const { products, can } = usePage().props as unknown as {
         products: ProductsPagination;
+        can: {
+            create: boolean;
+            edit: boolean;
+            delete: boolean;
+        };
     };
     const { flash } = usePage<{ flash: { message?: string; error?: string; } }>().props;
 
@@ -75,14 +80,14 @@ export default function Index() {
                                 </button>
                             )}
                         </div> */}
-                        {/* {can.create && ( */}
+                        {can.create && (
                         <Button>
                             <Link href="/products/create" prefetch className="flex items-center gap-2">
                                 <Plus className="h-4 w-4" />
                                 Nuevo producto
                             </Link>
                         </Button>
-                        {/* )} */}
+                        )}
                     </div>
                     <Card>
                         <CardContent>
@@ -114,15 +119,15 @@ export default function Index() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end" className="w-auto p-1">
-                                                            {/* {can.edit && ( */}
+                                                            {can.edit && (
                                                             <DropdownMenuItem asChild className="p-2">
                                                                 <Link href={`/products/${product.id}/edit`} prefetch className="flex justify-center w-full">
                                                                     <FaEdit className="text-blue-500" />
                                                                     Editar
                                                                 </Link>
                                                             </DropdownMenuItem>
-                                                            {/* )} */}
-                                                            {/* {can.delete && ( */}
+                                                            )}
+                                                            {can.delete && (
                                                             <DropdownMenuItem
                                                                 // onClick={() => deletePost(user.id)}
                                                                 className="p-2 flex justify-center text-red-600"
@@ -130,7 +135,7 @@ export default function Index() {
                                                                 <FiTrash2 color="#ff0000" />
                                                                 Delete
                                                             </DropdownMenuItem>
-                                                            {/* )} */}
+                                                            )}
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>

@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:categoria.ver categorias')->only(['index', 'show']);
+        $this->middleware('permission:categoria.crear categorias')->only(['create', 'store']);
+        $this->middleware('permission:categoria.editar categorias')->only(['edit', 'update']);
+        $this->middleware('permission:categoria.eliminar categorias')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -21,6 +28,11 @@ class CategoryController extends Controller
 
         return Inertia::render('categories/index', [
             'categories' => $categories,
+            'can' => [
+                'create' => Auth::user()->can('categoria.crear categorias'),
+                'edit' => Auth::user()->can('categoria.editar categorias'),
+                'delete' => Auth::user()->can('categoria.eliminar categorias'),
+            ],
         ]);
     }
 

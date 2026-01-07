@@ -1,6 +1,6 @@
-// import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+
 import AppLayout from '@/layouts/app-layout';
-// import { dashboard } from '@/routes';
+
 import { type BreadcrumbItem } from '@/types';
 import { User, UsersPagination } from '@/types/user';
 import { Head, Link, router, usePage } from '@inertiajs/react';
@@ -34,8 +34,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { users } = usePage().props as unknown as {
+    const { users, can } = usePage().props as unknown as {
         users: UsersPagination;
+        can: {
+            detalle: boolean;
+            create: boolean;
+            edit: boolean;
+            delete: boolean;
+            updateStatus: boolean;
+            updatePassword: boolean;
+        };
     };
     const { flash } = usePage<{ flash: { message?: string; error?: string; } }>().props;
 
@@ -96,14 +104,14 @@ export default function Index() {
                                 </button>
                             )}
                         </div> */}
-                        {/* {can.create && ( */}
+                        {can.create && (
                             <Button>
                                 <Link href="/users/create" prefetch className="flex items-center gap-2">
                                     <Plus className="h-4 w-4" />
                                     Nuevo usuario
                                 </Link>
                             </Button>
-                        {/* )} */}
+                        )}
                     </div>
                     <Card>
                         <CardContent>
@@ -115,9 +123,9 @@ export default function Index() {
                                         <TableHead>Nombre</TableHead>
                                         <TableHead>Email</TableHead>
                                         <TableHead>Imagen</TableHead>
-                                        {/* {can.updateStatus && ( */}
+                                        {can.updateStatus && (
                                             <TableHead>Estado</TableHead>
-                                        {/* )} */}
+                                        )}
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -133,27 +141,27 @@ export default function Index() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end" className="w-auto p-1">
-                                                            {/* {can.edit && ( */}
+                                                            {can.edit && (
                                                                 <DropdownMenuItem asChild className="p-2">
                                                                     <Link href={`/users/${user.id}/edit`} prefetch className="flex justify-center w-full">
                                                                         <FaEdit className="text-blue-500" />
                                                                         Editar
                                                                     </Link>
                                                                 </DropdownMenuItem>
-                                                            {/* )} */}
-                                                            {/* {can.edit && ( */}
-                                                            <DropdownMenuItem
-                                                                onSelect={() => {
-                                                                    setSelectedInfoUserId(user.id);
-                                                                    setOpenInfo(true);
-                                                                }}
-                                                                className="p-2 flex justify-center"
-                                                            >
-                                                                <FaEye className="text-green-600" />
-                                                                Ver detalles
-                                                            </DropdownMenuItem>
-                                                            {/* )} */}
-                                                            {/* {can.updatePassword && ( */}
+                                                            )}
+                                                            {can.detalle && (
+                                                                <DropdownMenuItem
+                                                                    onSelect={() => {
+                                                                        setSelectedInfoUserId(user.id);
+                                                                        setOpenInfo(true);
+                                                                    }}
+                                                                    className="p-2 flex justify-center"
+                                                                >
+                                                                    <FaEye className="text-green-600" />
+                                                                    Ver detalles
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            {can.updatePassword && (
                                                                 <DropdownMenuItem
                                                                     onSelect={() => {
                                                                         setSelectedUserId(user.id);
@@ -164,8 +172,8 @@ export default function Index() {
                                                                     <GiPadlockOpen className="text-yellow-600" />
                                                                     Reset password
                                                                 </DropdownMenuItem>
-                                                            {/* )} */}
-                                                            {/* {can.delete && ( */}
+                                                            )}
+                                                            {can.delete && (
                                                                 <DropdownMenuItem
                                                                     // onClick={() => deletePost(user.id)}
                                                                     className="p-2 flex justify-center text-red-600"
@@ -173,7 +181,7 @@ export default function Index() {
                                                                     <FiTrash2 color="#ff0000" />
                                                                     Delete
                                                                 </DropdownMenuItem>
-                                                            {/* )} */}
+                                                            )}
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>
@@ -182,7 +190,7 @@ export default function Index() {
                                                 <TableCell>
                                                     <ImagePreview src={user.image} alt={user.name} imageName={user.name} />
                                                 </TableCell>
-                                                {/* {can.updateStatus && ( */}
+                                                {can.updateStatus && (
                                                     <TableCell>
                                                         <Switch
                                                             checked={user.status}
@@ -190,7 +198,7 @@ export default function Index() {
                                                             className={user.status ? 'bg-green-500' : 'bg-red-500'}
                                                         />
                                                     </TableCell>
-                                                {/* )} */}
+                                                )}
                                             </TableRow>
                                         ))
                                     ) : (

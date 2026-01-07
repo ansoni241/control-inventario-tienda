@@ -28,8 +28,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { purchases } = usePage().props as unknown as {
+    const { purchases, can } = usePage().props as unknown as {
         purchases: PurchasesPagination;
+        can: {
+            create: boolean;
+            show: boolean;
+            edit: boolean;
+            delete: boolean;
+        };
     };
     const { flash } = usePage<{ flash: { message?: string; error?: string; } }>().props;
     const [openInfo, setOpenInfo] = useState(false);
@@ -76,14 +82,14 @@ export default function Index() {
                                 </button>
                             )}
                         </div> */}
-                        {/* {can.create && ( */}
+                        {can.create && (
                         <Button>
                             <Link href="/purchases/create" prefetch className="flex items-center gap-2">
                                 <Plus className="h-4 w-4" />
                                 Nueva compra
                             </Link>
                         </Button>
-                        {/* )} */}
+                        )}
                     </div>
                     <Card>
                         <CardContent>
@@ -113,7 +119,7 @@ export default function Index() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end" className="w-auto p-1">
-                                                            {/* {can.edit && ( */}
+                                                            {can.show && (
                                                             <DropdownMenuItem
                                                                 onSelect={() => {
                                                                     setSelectedInfoPurchaseId(purchase.id);
@@ -124,15 +130,15 @@ export default function Index() {
                                                                 <FaEye className="text-green-600" />
                                                                 Ver detalles
                                                             </DropdownMenuItem>
-                                                            {/* )} */}
-                                                            {/* {can.edit && ( */}
+                                                            )}
+                                                            {can.edit && (
                                                             <DropdownMenuItem asChild className="p-2">
                                                                 <Link href={`/purchases/${purchase.id}/edit`} prefetch className="flex justify-center w-full">
                                                                     <FaEdit className="text-blue-500" />
                                                                     Editar
                                                                 </Link>
                                                             </DropdownMenuItem>
-                                                            {/* )} */}
+                                                            )}
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>
@@ -160,17 +166,19 @@ export default function Index() {
                 </div>
             </div>
             {/* Modal de info de Compra */}
-            {openInfo && selectedInfoPurchaseId !== null && (
-                <PurchaseInfoModal
-                    key={selectedInfoPurchaseId}
-                    open={openInfo}
-                    setOpen={(open) => {
-                        setOpenInfo(open);
-                        if (!open) setSelectedInfoPurchaseId(null);
-                    }}
-                    purchaseId={selectedInfoPurchaseId}
-                />
-            )}
+            <div className="relative overflow-x-hidden">
+                {openInfo && selectedInfoPurchaseId !== null && (
+                    <PurchaseInfoModal
+                        key={selectedInfoPurchaseId}
+                        open={openInfo}
+                        setOpen={(open) => {
+                            setOpenInfo(open);
+                            if (!open) setSelectedInfoPurchaseId(null);
+                        }}
+                        purchaseId={selectedInfoPurchaseId}
+                    />
+                )}
+            </div>
         </AppLayout>
     )
 }

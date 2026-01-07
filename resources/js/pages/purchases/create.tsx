@@ -217,100 +217,102 @@ export default function Create({ suppliers, products }: CreatePurchaseProps) {
                                         </Button>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        {data.items.map((item, index) => (
-                                            <div
-                                                key={index}
-                                                className="grid grid-cols-4 gap-4 items-end border p-3 rounded-lg"
-                                            >
-                                                <div>
-                                                    <Label>Producto</Label>
-                                                    <ComboBox
-                                                        options={products}
-                                                        value={item.product_id}
-                                                        onChange={(val) => {
-                                                            const updated = [...data.items];
-                                                            updated[index].product_id = val;
-                                                            setData("items", updated);
-                                                            validateItemField(index, "product_id", val);
-                                                        }}
-                                                        placeholder="Seleccionar producto"
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            clientErrors[`items.${index}.product_id`] ||
-                                                            errors[`items.${index}.product_id`]
-                                                        }
-                                                    />
-                                                </div>
-
-                                                <div>
-                                                    <Label>Cantidad</Label>
-                                                    <Input
-                                                        type="number"
-                                                        value={item.quantity}
-                                                        onChange={e => {
-                                                            const val = e.target.value;
-                                                            const updated = [...data.items];
-                                                            updated[index].quantity = val;
-                                                            setData("items", updated);
-                                                            validateItemField(
-                                                                index,
-                                                                "quantity",
-                                                                val
-                                                            );
-                                                        }}
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            clientErrors[
-                                                            `items.${index}.quantity`
-                                                            ] || errors[`items.${index}.quantity`]
-                                                        }
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <Label>Precio unitario</Label>
-                                                    <Input
-                                                        type="number"
-                                                        value={item.unit_price}
-                                                        onChange={e => {
-                                                            const val = e.target.value;
-                                                            const updated = [...data.items];
-                                                            updated[index].unit_price = val;
-                                                            setData("items", updated);
-                                                            validateItemField(
-                                                                index,
-                                                                "unit_price",
-                                                                val
-                                                            );
-                                                        }}
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            clientErrors[
-                                                            `items.${index}.unit_price`
-                                                            ] || errors[`items.${index}.unit_price`]
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <div className="text-sm text-gray-700">
-                                                        Subtotal:{" "}
-                                                        {Number(item.quantity || 0) *
-                                                            Number(item.unit_price || 0)}
+                                    <div className="overflow-x-auto">
+                                        <div className="min-w-[900px] space-y-4">
+                                            {data.items.map((item, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="grid grid-cols-4 gap-4 items-end border p-3 rounded-lg"
+                                                >
+                                                    <div>
+                                                        <Label>Producto</Label>
+                                                        <ComboBox
+                                                            options={products}
+                                                            value={item.product_id}
+                                                            onChange={(val) => {
+                                                                const updated = [...data.items];
+                                                                updated[index].product_id = val;
+                                                                setData("items", updated);
+                                                                validateItemField(index, "product_id", val);
+                                                            }}
+                                                            placeholder="Seleccionar producto"
+                                                        />
+                                                        <InputError
+                                                            message={
+                                                                clientErrors[`items.${index}.product_id`] ||
+                                                                errors[`items.${index}.product_id`]
+                                                            }
+                                                        />
                                                     </div>
-                                                    <Button
-                                                        type="button"
-                                                        size="icon"
-                                                        variant="destructive"
-                                                        onClick={() => removeItem(index)}
-                                                    >
-                                                        <Trash className="w-4 h-4" />
-                                                    </Button>
+
+                                                    <div>
+                                                        <Label>Cantidad</Label>
+                                                        <Input
+                                                            type="number"
+                                                            value={item.quantity}
+                                                            onChange={e => {
+                                                                const val = e.target.value;
+                                                                const updated = [...data.items];
+                                                                updated[index].quantity = val;
+                                                                setData("items", updated);
+                                                                validateItemField(
+                                                                    index,
+                                                                    "quantity",
+                                                                    val
+                                                                );
+                                                            }}
+                                                        />
+                                                        <InputError
+                                                            message={
+                                                                clientErrors[
+                                                                `items.${index}.quantity`
+                                                                ] || errors[`items.${index}.quantity`]
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <Label>Precio unitario</Label>
+                                                        <Input
+                                                            type="number"
+                                                            value={item.unit_price}
+                                                            onChange={e => {
+                                                                const val = e.target.value;
+                                                                const updated = [...data.items];
+                                                                updated[index].unit_price = val;
+                                                                setData("items", updated);
+                                                                validateItemField(
+                                                                    index,
+                                                                    "unit_price",
+                                                                    val
+                                                                );
+                                                            }}
+                                                        />
+                                                        <InputError
+                                                            message={
+                                                                clientErrors[
+                                                                `items.${index}.unit_price`
+                                                                ] || errors[`items.${index}.unit_price`]
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="text-sm text-gray-700">
+                                                            Subtotal:{" "}
+                                                            {Number(item.quantity || 0) *
+                                                                Number(item.unit_price || 0)}
+                                                        </div>
+                                                        <Button
+                                                            type="button"
+                                                            size="icon"
+                                                            variant="destructive"
+                                                            onClick={() => removeItem(index)}
+                                                        >
+                                                            <Trash className="w-4 h-4" />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
                                     <div className="mt-4 text-right text-lg font-semibold text-slate-700">
                                         Total: {totalVisual.toFixed(2)}

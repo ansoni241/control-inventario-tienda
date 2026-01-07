@@ -108,7 +108,7 @@ export default function SalePaymentModal({ open, setOpen, saleId, onPaymentSucce
                     </DialogHeader>
 
                     {/* Info de venta */}
-                    <div className="bg-gray-50 border rounded-lg p-4 shadow-sm">
+                    <div className="bg-gray-50 dark:bg-gray-800 border rounded-lg p-4 shadow-sm">
                         <div className="grid grid-cols-2 gap-2 text-sm">
                             <p><b>Cliente:</b> {sale.customer_name}</p>
                             <p><b>Registrado por:</b> {sale.user_name}</p>
@@ -121,11 +121,11 @@ export default function SalePaymentModal({ open, setOpen, saleId, onPaymentSucce
                     </div>
 
                     {/* Formulario nuevo pago */}
-                    <div className="bg-white border rounded-lg p-4 shadow-sm space-y-2">
+                    <div className="bg-white dark:bg-gray-800 border rounded-lg p-4 shadow-sm space-y-2">
                         <h4 className="font-semibold">Agregar nuevo pago</h4>
                         <div className="flex gap-2">
                             <select
-                                className="border rounded px-2 py-1 flex-1"
+                                className="border dark:bg-black rounded px-2 py-1 flex-1"
                                 value={newPayment.method}
                                 onChange={e => setNewPayment(prev => ({ ...prev, method: e.target.value }))}
                             >
@@ -136,6 +136,7 @@ export default function SalePaymentModal({ open, setOpen, saleId, onPaymentSucce
                             </select>
                             <Input
                                 type="number"
+                                className="dark:bg-black"
                                 placeholder="Monto"
                                 value={newPayment.amount}
                                 onChange={e => setNewPayment(prev => ({ ...prev, amount: Number(e.target.value) }))}
@@ -147,7 +148,7 @@ export default function SalePaymentModal({ open, setOpen, saleId, onPaymentSucce
                     {payments.length > 0 && (
                         <div className="overflow-x-auto">
                             <table className="min-w-full border text-sm text-gray-700">
-                                <thead className="bg-gray-100">
+                                <thead className="bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
                                     <tr>
                                         <th className="px-3 py-2 text-left">Método</th>
                                         <th className="px-3 py-2 text-center">Monto</th>
@@ -155,7 +156,7 @@ export default function SalePaymentModal({ open, setOpen, saleId, onPaymentSucce
                                 </thead>
                                 <tbody>
                                     {payments.map((p, i) => (
-                                        <tr key={i} className="border-t">
+                                        <tr key={i} className="border-t dark:border-gray-600 dark:text-gray-200">
                                             <td className="px-3 py-2">{p.method}</td>
                                             <td className="px-3 py-2 text-center">{Number(p.amount).toFixed(2)}</td>
                                         </tr>

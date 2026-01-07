@@ -49,7 +49,7 @@ export default function UserInfoModal({ open, setOpen, userId }: Props) {
         {error && <p className="text-center py-6 text-red-600 font-semibold">{error}</p>}
 
         {user && (
-          <div className="bg-white shadow-md rounded-lg p-6 space-y-4 text-gray-700">
+          <div className="bg-white dark:bg-black shadow-md rounded-lg p-6 space-y-4 text-gray-700 dark:text-gray-200">
             <div className="flex items-center space-x-6">
               {user.image ? (
                 <img
@@ -63,7 +63,7 @@ export default function UserInfoModal({ open, setOpen, userId }: Props) {
                 </div>
               )}
               <div className="flex-1">
-                <h3 className="text-2xl font-semibold text-gray-900">{user.name}</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{user.name}</h3>
                 <p className="text-sm text-gray-500">{user.email}</p>
                 <p className={`inline-block mt-1 px-2 py-1 text-xs rounded ${user.status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
                   {user.status ? "Activo" : "Inactivo"}

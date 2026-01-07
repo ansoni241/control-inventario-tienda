@@ -25,6 +25,40 @@ class RoleSeeder extends Seeder
                 'user.eliminar usuarios',
                 'user.editar estado usuario',
                 'user.editar password usuario',
+                //ROL
+                'role.ver roles',
+                'role.crear roles',
+                'role.editar roles',
+                'role.eliminar roles',
+                //CATEGORIA
+                'categoria.ver categorias',
+                'categoria.crear categorias',
+                'categoria.editar categorias',
+                'categoria.eliminar categorias',
+                //PROVEEDOR
+                'proveedor.ver proveedores',
+                'proveedor.crear proveedores',
+                'proveedor.editar proveedores',
+                'proveedor.eliminar proveedores',
+                //CLIENTE
+                'cliente.ver clientes',
+                'cliente.crear clientes',
+                'cliente.editar clientes',
+                'cliente.eliminar clientes',
+                //PRODUCTO
+                'producto.ver productos',
+                'producto.crear productos',
+                'producto.editar productos',
+                'producto.eliminar productos',
+                //COMPRA
+                'compra.ver compras',
+                'compra.crear compras',
+                'compra.editar compras',
+                'compra.eliminar compras',
+                //REPORTE COMPRA
+                'reporte-compra.ver reporte compra',
+                'reporte-compra.exportar reporte compra',
+
             ],
             'administrador' => [
                 //USUARIO
