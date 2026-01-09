@@ -58,6 +58,14 @@ class RoleSeeder extends Seeder
                 //REPORTE COMPRA
                 'reporte-compra.ver reporte compra',
                 'reporte-compra.exportar reporte compra',
+                //VENTA
+                'venta.ver ventas',
+                'venta.crear ventas',
+                'venta.editar ventas',
+                'venta.eliminar ventas',
+                //REPORTE VENTA
+                'reporte-venta.ver reporte venta',
+                'reporte-venta.exportar reporte venta',
 
             ],
             'administrador' => [

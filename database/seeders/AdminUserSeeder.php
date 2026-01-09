@@ -21,6 +21,7 @@ class AdminUserSeeder extends Seeder
             return;
         }
         // Crea el usuario
+        //Este es un usuario por defecto para el rol admin una vez subas la aplicacion se recomienda cambiar el email y password
         $admin = User::create([
             'name' => 'Admin Principal',
             'email' => 'admin@gmail.com',

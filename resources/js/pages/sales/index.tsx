@@ -25,7 +25,15 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { sales } = usePage().props as unknown as { sales: SalesPagination };
+    const { sales, can } = usePage().props as unknown as {
+        sales: SalesPagination;
+        can: {
+            create: boolean;
+            show: boolean;
+            edit: boolean;
+            delete: boolean;
+        };
+    };
     const { flash } = usePage<{ flash: { message?: string; error?: string; } }>().props;
 
     const [openInfo, setOpenInfo] = useState(false);
@@ -48,12 +56,14 @@ export default function Index() {
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className='rounded border p-6 shadow-xl'>
                     <div className='flex items-center justify-between mb-5'>
-                        <Button>
-                            <Link href="/sales/create" prefetch className="flex items-center gap-2">
-                                <Plus className="h-4 w-4" />
-                                Nueva venta
-                            </Link>
-                        </Button>
+                        {can.create && (
+                            <Button>
+                                <Link href="/sales/create" prefetch className="flex items-center gap-2">
+                                    <Plus className="h-4 w-4" />
+                                    Nueva venta
+                                </Link>
+                            </Button>
+                        )}
                     </div>
                     <Card>
                         <CardContent>
@@ -83,38 +93,42 @@ export default function Index() {
                                                             </Button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end" className="w-auto p-1">
-                                                            <DropdownMenuItem
-                                                                onSelect={() => {
-                                                                    setSelectedInfoSaleId(sale.id);
-                                                                    setOpenInfo(true);
-                                                                }}
-                                                                className="p-2 flex justify-center"
-                                                            >
-                                                                <FaEye className="text-green-600" />
-                                                                Ver detalles
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuItem
-                                                                onSelect={() => {
-                                                                    setSelectedPaymentSaleId(sale.id);
-                                                                    setOpenPayment(true);
-                                                                }}
-                                                                className="p-2 flex justify-center"
-                                                            >
-                                                                💰 Registrar pago
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuItem asChild className="p-2">
-                                                                <Link href={`/sales/${sale.id}/edit`} prefetch className="flex justify-center w-full">
-                                                                    <FaEdit className="text-blue-500" />
-                                                                    Editar
-                                                                </Link>
-                                                            </DropdownMenuItem>
-
+                                                            {can.show && (
+                                                                <DropdownMenuItem
+                                                                    onSelect={() => {
+                                                                        setSelectedInfoSaleId(sale.id);
+                                                                        setOpenInfo(true);
+                                                                    }}
+                                                                    className="p-2 flex justify-center"
+                                                                >
+                                                                    <FaEye className="text-green-600" />
+                                                                    Ver detalles
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            {can.edit && (
+                                                                <DropdownMenuItem
+                                                                    onSelect={() => {
+                                                                        setSelectedPaymentSaleId(sale.id);
+                                                                        setOpenPayment(true);
+                                                                    }}
+                                                                    className="p-2 flex justify-center"
+                                                                >
+                                                                    💰 Registrar pago
+                                                                </DropdownMenuItem>
+                                                            )}
+                                                            {can.edit && (
+                                                                <DropdownMenuItem asChild className="p-2">
+                                                                    <Link href={`/sales/${sale.id}/edit`} prefetch className="flex justify-center w-full">
+                                                                        <FaEdit className="text-blue-500" />
+                                                                        Editar
+                                                                    </Link>
+                                                                </DropdownMenuItem>
+                                                            )}
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </TableCell>
                                                 <TableCell>{sale.customer?.name ?? '—'}</TableCell>
                                                 <TableCell>{sale.user?.name ?? '—'}</TableCell>
-                                                {/* <TableCell>{sale.date}</TableCell> */}
                                                 <TableCell>{new Date(sale.date).toISOString().split('T')[0]}</TableCell>
                                                 <TableCell>{sale.total.toFixed(2)}</TableCell>
                                                 <TableCell>{sale.payments_sum_amount?.toFixed(2) ?? '0.00'}</TableCell>

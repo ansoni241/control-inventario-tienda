@@ -15,6 +15,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SaleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:venta.ver ventas')->only(['index', 'show']);
+        $this->middleware('permission:venta.crear ventas')->only(['create', 'store']);
+        $this->middleware('permission:venta.editar ventas')->only(['edit', 'update']);
+        $this->middleware('permission:venta.eliminar ventas')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -26,7 +33,13 @@ class SaleController extends Controller
             ->paginate(10);
 
         return Inertia::render('sales/index', [
-            'sales' => $sales
+            'sales' => $sales,
+            'can' => [
+                'create' => Auth::user()->can('venta.crear ventas'),
+                'show' => Auth::user()->can('venta.ver ventas'),
+                'edit' => Auth::user()->can('venta.editar ventas'),
+                'delete' => Auth::user()->can('venta.eliminar ventas'),
+            ],
         ]);
     }
 

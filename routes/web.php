@@ -31,8 +31,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard/data', [DashboardController::class, 'data']);
 
     Route::get('dashboard/data', [DashboardController::class, 'data']);
-    // Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // Route::get('dashboard/data', [DashboardController::class, 'data']);
     //USERS
     Route::resource('users', UserController::class);
     Route::put('/users/{user}/status', [UserController::class, 'updateStatus']);
@@ -63,16 +61,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sales/{sale}', [SaleController::class, 'show']);
     // Registrar nuevo pago
     Route::post('/sales/{sale}/payments', [SaleController::class, 'storePayment']);
-    // Route::resource('reportsales', SaleReportController::class);
-    // Route::get('/reportsales/export', [SaleReportController::class, 'export'])->name('reportsales.export');
     //Reportes
     Route::get('reportsales', [SaleReportController::class, 'index'])->name('reportsales.index');
     Route::get('reportsales/export', [SaleReportController::class, 'export'])->name('reportsales.export');
     Route::get('reportpurchases', [PurchaseReportController::class, 'index'])->name('reportpurchases.index');
     Route::get('reportpurchases/export', [PurchaseReportController::class, 'export'])->name('reportpurchases.export');
     //ROLES Y PERMISOS
-    // Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
-    // Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
     Route::resource('roles', RoleController::class);
 
 });
